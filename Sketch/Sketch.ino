@@ -8,36 +8,81 @@ int longDelay = 5000;
 int shortDelay = 3000;
 int mixDelay = 1000;
 
-int red = 10;
-int yellow = 9;
-int green = 8;
+int carRed = 12;
+int carYellow = 11;
+int carGreen = 10;
+int pedRed = 9;
+int pedGreen = 8;
+
+int button = 2;
+int crossTime = 5000;
+unsigned long changeTime;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-	pinMode(red, OUTPUT);
-	pinMode(yellow, OUTPUT);
-	pinMode(green, OUTPUT);
+	pinMode(button, INPUT);
+	
+	pinMode(carRed, OUTPUT);
+	pinMode(carYellow, OUTPUT);
+	pinMode(carGreen, OUTPUT);
+	pinMode(pedRed, OUTPUT);
+	pinMode(pedGreen, OUTPUT);
+
+	// initially allow cars
+	digitalWrite(carGreen, HIGH);
+	digitalWrite(pedRed, HIGH);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	digitalWrite(red, HIGH);
-	delay(longDelay);
+	int state = digitalRead(button);
 
-	digitalWrite(yellow, HIGH);
-	delay(shortDelay);
+	// check if button is pressed and it's >5 seconds since last press
+	if (state == HIGH && (millis() - changeTime) > 5000)
+	{
+		changeLights();
+	}
+}
 
-	digitalWrite(red, LOW);
-	digitalWrite(green, HIGH);
-	digitalWrite(yellow, LOW);
-	delay(mixDelay);
+void changeLights()
+{
+	digitalWrite(carGreen, LOW);
+	digitalWrite(carYellow, HIGH);
+	delay(2000);
 
-	delay(longDelay - mixDelay);
-	digitalWrite(green, LOW);
-	digitalWrite(yellow, HIGH);
-	delay(shortDelay);
+	digitalWrite(carYellow, LOW);
+	digitalWrite(carRed, HIGH);
+	delay(500);
 
-	digitalWrite(yellow, LOW);
+	digitalWrite(pedRed, LOW);
+	digitalWrite(pedGreen, HIGH);
+	delay(crossTime);
+
+	// flash ped green
+	digitalWrite(carYellow, HIGH);
+	for (int x = 0; x < 10; x++)
+	{
+		digitalWrite(pedGreen, HIGH);
+		delay(250);
+		digitalWrite(pedGreen, LOW);
+		delay(250);
+	}
+
+	// turn ped red on
+	digitalWrite(carRed, LOW);
+	digitalWrite(carYellow, LOW);
+	digitalWrite(pedRed, HIGH);
+	delay(150);
+
+	digitalWrite(carRed, LOW);
+	digitalWrite(carGreen, HIGH);
+	delay(3000);
+
+	digitalWrite(carYellow, LOW);
+	delay(2000);
+
+	// record time since last change of lights
+	changeTime = millis();
 }
