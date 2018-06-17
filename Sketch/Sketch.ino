@@ -4,47 +4,40 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-int led = 10;
+int longDelay = 5000;
+int shortDelay = 3000;
+int mixDelay = 1000;
+
+int red = 10;
+int yellow = 9;
+int green = 8;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-	pinMode(led, OUTPUT);
+	pinMode(red, OUTPUT);
+	pinMode(yellow, OUTPUT);
+	pinMode(green, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	for (int x = 0; x < 3; x++)
-	{
-		digitalWrite(led, HIGH);
-		delay(150);
-		digitalWrite(led, LOW);
-		delay(100);
-	}
+	digitalWrite(red, HIGH);
+	delay(longDelay);
 
-	// delay to cause gap between letters
-	delay(100);
+	digitalWrite(yellow, HIGH);
+	delay(shortDelay);
 
-	for (int x = 0; x < 3; x++)
-	{
-		digitalWrite(led, HIGH);
-		delay(400);
-		digitalWrite(led, LOW);
-		delay(100);
-	}
+	digitalWrite(red, LOW);
+	digitalWrite(green, HIGH);
+	digitalWrite(yellow, LOW);
+	delay(mixDelay);
 
-	// delay to cause gap between letters
-	delay(100);
+	delay(longDelay - mixDelay);
+	digitalWrite(green, LOW);
+	digitalWrite(yellow, HIGH);
+	delay(shortDelay);
 
-	for (int x = 0; x < 3; x++)
-	{
-		digitalWrite(led, HIGH);
-		delay(150);
-		digitalWrite(led, LOW);
-		delay(100);
-	}
-
-	// wait 5s before reporting next SOS signal
-	delay(5000);
+	digitalWrite(yellow, LOW);
 }
