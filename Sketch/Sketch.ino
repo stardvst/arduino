@@ -49,6 +49,7 @@ void changeLED()
 
 	// turn on current LED
 	digitalWrite(ledPin[currentLED], HIGH);
+	digitalWrite(ledPin[9 - currentLED], HIGH);
 
 	// increment by the direction value
 	currentLED += direction;
