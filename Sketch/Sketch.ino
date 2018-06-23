@@ -4,59 +4,25 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-byte ledPin[] = { 4,5,6,7,8,9,10,11,12,13 };
-int currentLED = 0;
-
-int ledDEalay;
-unsigned long changeTime;
-int potPin = 2;
-
-int direction = 1;
+int led = 11;
+float sinVal;
+int ledVal;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-	// set all pins to output
-	for (auto pin : ledPin)
-		pinMode(pin, OUTPUT);
-	
-	changeTime = millis();
+	pinMode(led, OUTPUT);
 }
-
-int buttonState = 0;
 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	// read pot value
-	ledDEalay = analogRead(potPin);
-
-	Serial.print(ledDEalay);
-
-	// if it has been ledDelay ms since last change
-	if (millis() - changeTime > ledDEalay)
+	for (auto x = 0; x < 180; ++x)
 	{
-		changeLED();
-		changeTime = millis();
+		// convert degrees to radians then obtain sin value
+		sinVal = sin(x * (3.1412 / 180));
+		ledVal = int(sinVal * 255);
+		analogWrite(led, ledVal);
+		delay(25);
 	}
-}
-
-void changeLED()
-{
-	// turn off all LEDs
-	for (auto pin : ledPin)
-		digitalWrite(pin, LOW);
-
-	// turn on current LED
-	digitalWrite(ledPin[currentLED], HIGH);
-
-	// bounce to the other end
-	if (currentLED < 5)
-		currentLED = 9 - currentLED;
-	else
-		currentLED = 10 - currentLED;
-
-	// start over
-	if (currentLED == 5)
-		currentLED = 0;
 }
