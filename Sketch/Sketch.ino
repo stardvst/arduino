@@ -49,14 +49,14 @@ void changeLED()
 
 	// turn on current LED
 	digitalWrite(ledPin[currentLED], HIGH);
-	digitalWrite(ledPin[9 - currentLED], HIGH);
 
-	// increment by the direction value
-	currentLED += direction;
+	// bounce to the other end
+	if (currentLED < 5)
+		currentLED = 9 - currentLED;
+	else
+		currentLED = 10 - currentLED;
 
-	// change direction if we reach the end
-	if (currentLED == 9)
-		direction = -1;
-	else if (currentLED == 0)
-		direction = 1;
+	// start over
+	if (currentLED == 5)
+		currentLED = 0;
 }
