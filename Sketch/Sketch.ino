@@ -4,15 +4,23 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-int led = 13;
-int button = 2;
+byte ledPin[] = { 4,5,6,7,8,9,10,11,12,13 };
+int currentLED = 0;
+
+int ledDEalay;
+unsigned long changeTime;
+int potPin = 2;
+
+int direction = 1;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-	pinMode(button, INPUT);
+	// set all pins to output
+	for (auto pin : ledPin)
+		pinMode(pin, OUTPUT);
 	
-	pinMode(led, OUTPUT);
+	changeTime = millis();
 }
 
 int buttonState = 0;
@@ -20,9 +28,34 @@ int buttonState = 0;
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	buttonState = digitalRead(button);
-	if (buttonState == HIGH)
-		digitalWrite(led, HIGH);
-	else
-		digitalWrite(led, LOW);
+	// read pot value
+	ledDEalay = analogRead(potPin);
+
+	Serial.print(ledDEalay);
+
+	// if it has been ledDelay ms since last change
+	if (millis() - changeTime > ledDEalay)
+	{
+		changeLED();
+		changeTime = millis();
+	}
+}
+
+void changeLED()
+{
+	// turn off all LEDs
+	for (auto pin : ledPin)
+		digitalWrite(pin, LOW);
+
+	// turn on current LED
+	digitalWrite(ledPin[currentLED], HIGH);
+
+	// increment by the direction value
+	currentLED += direction;
+
+	// change direction if we reach the end
+	if (currentLED == 9)
+		direction = -1;
+	else if (currentLED == 0)
+		direction = 1;
 }
