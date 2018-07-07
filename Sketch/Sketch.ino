@@ -21,13 +21,19 @@ void setup()
 
 	irrecv.enableIRIn();
 }
-
+olling 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
 	if (irrecv.decode(&results))
 	{
 		Serial.println(results.value, DEC);
+
+		if (results.value == 16724175)
+			digitalWrite(13, HIGH);
+		else if (results.value == 16718055)
+			digitalWrite(13, LOW);
+
 		irrecv.resume();
 	}
 }
