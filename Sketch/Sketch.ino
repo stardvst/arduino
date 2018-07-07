@@ -4,52 +4,30 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-int trigger = 7;
-int echo = 6;
-int led = 12;
+#include <IRRemote/IRremote.h>
 
-int time = 0;
-int dist = 0;
+int RECV_PIN = 11;
+
+IRrecv irrecv(RECV_PIN);
+
+decode_results results;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
 	Serial.begin(9600);
 
-	pinMode(echo, INPUT);
-	pinMode(trigger, OUTPUT);
-	pinMode(led, OUTPUT);
+	pinMode(13, OUTPUT);
+
+	irrecv.enableIRIn();
 }
 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	digitalWrite(trigger, LOW);
-	delay(5);
-
-	digitalWrite(trigger, HIGH);
-	delay(10);
-
-	digitalWrite(trigger, LOW);
-
-	time = pulseIn(echo, HIGH);
-	dist = (time / 2) / 29.1;
-
-	if (dist >= 500 || dist <= 0)
-		Serial.println("No measurement.");
-	else
+	if (irrecv.decode(&results))
 	{
-		Serial.print(dist);
-		Serial.println("cm");
+		Serial.println(results.value, DEC);
+		irrecv.resume();
 	}
-
-	if (dist <= 40)
-	{
-		digitalWrite(led, HIGH);
-		delay(dist * 3);
-		digitalWrite(led, LOW);
-		delay(dist * 3);
-	}
-
-	delay(1000);
 }
