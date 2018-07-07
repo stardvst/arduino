@@ -4,8 +4,9 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-int trigger =  7;
+int trigger = 7;
 int echo = 6;
+int piezo = 5;
 
 int time = 0;
 int dist = 0;
@@ -17,6 +18,7 @@ void setup()
 
 	pinMode(echo, INPUT);
 	pinMode(trigger, OUTPUT);
+	pinMode(piezo, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -40,6 +42,8 @@ void loop()
 		Serial.print(dist);
 		Serial.println("cm");
 	}
+
+	digitalWrite(piezo, dist <= 80 ? HIGH : LOW);
 
 	delay(1000);
 }
