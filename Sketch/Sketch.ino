@@ -4,18 +4,26 @@ Created:	17-Jun-18 11:18:21
 Author:	liliam
 */
 
-int led = 5;
-int pir = 7;
+int input = A0;
+int LED = 10;
+int sensorValue = 0;
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-	pinMode(led, OUTPUT);
-	pinMode(pir, INPUT);
+	Serial.begin(9600);
+	pinMode(LED, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop()
 {
-	digitalWrite(led, digitalRead(pir));
+	sensorValue = analogRead(input);
+
+	Serial.print("Sensor value = ");
+	Serial.print(sensorValue);
+
+	digitalWrite(LED, sensorValue < 50 ? HIGH : LOW);
+
+	delay(50);
 }
