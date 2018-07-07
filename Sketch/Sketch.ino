@@ -6,7 +6,7 @@ Author:	liliam
 
 int trigger = 7;
 int echo = 6;
-int piezo = 5;
+int led = 12;
 
 int time = 0;
 int dist = 0;
@@ -18,7 +18,7 @@ void setup()
 
 	pinMode(echo, INPUT);
 	pinMode(trigger, OUTPUT);
-	pinMode(piezo, OUTPUT);
+	pinMode(led, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -43,7 +43,13 @@ void loop()
 		Serial.println("cm");
 	}
 
-	digitalWrite(piezo, dist <= 80 ? HIGH : LOW);
+	if (dist <= 40)
+	{
+		digitalWrite(led, HIGH);
+		delay(dist * 3);
+		digitalWrite(led, LOW);
+		delay(dist * 3);
+	}
 
 	delay(1000);
 }
